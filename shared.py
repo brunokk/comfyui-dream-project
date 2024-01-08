@@ -93,6 +93,9 @@ def get_logger():
 class DreamImageProcessor:
     def __init__(self, inputs: torch.Tensor, **extra_args):
         self._images_in_batch = [convertTensorImageToPIL(tensor) for tensor in inputs]
+        # Fix an error for using w API-exported prompts. -ec jan8.2024
+        if "extra_pnginfo" not in extra_args:
+            extra_args["extra_pnginfo"] = None
         self._extra_args = extra_args
         self.is_batch = len(self._images_in_batch) > 1
 
